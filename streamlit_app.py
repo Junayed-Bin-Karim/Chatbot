@@ -1,73 +1,91 @@
-# chatBot_lightweight.py
 import streamlit as st
-import requests
-import json
+import time
 
-# Alternative using a smaller model or API
-def detect_emotion_simple(text):
-    """Simple rule-based emotion detection as fallback"""
-    positive_words = ['happy', 'joy', 'excited', 'good', 'great', 'wonderful', 'amazing']
-    negative_words = ['sad', 'angry', 'mad', 'bad', 'terrible', 'awful', 'hate']
-    
-    text_lower = text.lower()
-    
-    if any(word in text_lower for word in positive_words):
-        return 'joy', 0.8
-    elif any(word in text_lower for word in negative_words):
-        return 'sadness', 0.8
-    else:
-        return 'neutral', 0.5
+# Cache the model loading
+@st.cache_resource
+def load_emotion_model():
+    try:
+        from transformers import pipeline
+        return pipeline("text-classification", 
+                       model="bhadresh-savani/bert-base-uncased-emotion",
+                       return_all_scores=True)
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
+        return None
 
 def main():
-    st.title("Emotion Chatbot")
+    st.set_page_config(page_title="Emotion Chatbot", page_icon="🤖")
     
-    # Initialize session state
-    if 'conversation' not in st.session_state:
-        st.session_state.conversation = []
+    st.title("🤖 Emotion-Aware Chatbot")
+    st.write("Chat with me and I'll detect your emotions!")
     
-    # User input
-    user_input = st.text_input("You:")
+    # Load model
+    with st.spinner("Loading emotion detection model..."):
+        emotion_pipeline = load_emotion_model()
     
-    if user_input:
-        # Try to use transformers if available, otherwise use fallback
-        try:
-            from transformers import pipeline
-            emotion_pipeline = pipeline("text-classification", 
-                                      model="bhadresh-savani/bert-base-uncased-emotion",
-                                      return_all_scores=True)
-            results = emotion_pipeline(user_input)
-            emotion = max(results[0], key=lambda x: x['score'])
-            emotion_name = emotion['label']
-            confidence = emotion['score']
-        except:
-            # Fallback to simple detection
-            emotion_name, confidence = detect_emotion_simple(user_input)
+    if emotion_pipeline is None:
+        st.error("""
+        **Failed to load emotion detection model.**
         
-        # Generate response
-        responses = {
-            'joy': "That's wonderful! 😊",
-            'sadness': "I'm here for you. 💙",
-            'anger': "I understand you're upset.",
-            'fear': "It's okay to feel scared sometimes.",
-            'surprise': "Wow! That's surprising!",
-            'neutral': "Thanks for sharing that."
-        }
+        Please check that:
+        - `transformers` and `torch` are in requirements.txt
+        - The model name is correct
+        - There's enough memory available
+        """)
+        return
+    
+    # Initialize chat history
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+    
+    # Display chat messages
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+            if "emotion" in message:
+                st.caption(f"Detected emotion: {message['emotion']}")
+    
+    # Chat input
+    if prompt := st.chat_input("How are you feeling today?"):
+        # Add user message to chat history
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
         
-        response = responses.get(emotion_name, "I appreciate you sharing that.")
+        # Detect emotion and generate response
+        with st.chat_message("assistant"):
+            with st.spinner("Analyzing emotion..."):
+                try:
+                    results = emotion_pipeline(prompt)
+                    emotion = max(results[0], key=lambda x: x['score'])
+                    emotion_name = emotion['label']
+                    confidence = emotion['score']
+                    
+                    # Generate response based on emotion
+                    responses = {
+                        'sadness': "I'm sorry you're feeling this way. I'm here for you. 💙",
+                        'joy': "That's wonderful! Your happiness is contagious! 😊",
+                        'love': "It's beautiful to feel love. ❤️",
+                        'anger': "I understand you're frustrated. Would you like to talk about it?",
+                        'fear': "It's okay to feel scared sometimes. You're stronger than you think.",
+                        'surprise': "Wow! That's quite surprising! What happened?"
+                    }
+                    
+                    response = responses.get(emotion_name, "Thank you for sharing that with me.")
+                    full_response = f"{response}\n\n*(Detected: {emotion_name} with {confidence:.1%} confidence)*"
+                    
+                except Exception as e:
+                    full_response = "I understand. Thanks for sharing your feelings with me."
+                    emotion_name = "unknown"
+            
+            st.markdown(full_response)
         
-        # Store conversation
-        st.session_state.conversation.append({
-            'user': user_input,
-            'emotion': emotion_name,
-            'confidence': f"{confidence:.2f}",
-            'bot': response
+        # Add assistant response to chat history
+        st.session_state.messages.append({
+            "role": "assistant", 
+            "content": full_response,
+            "emotion": emotion_name
         })
-    
-    # Display conversation
-    for i, chat in enumerate(st.session_state.conversation):
-        st.write(f"**You:** {chat['user']}")
-        st.write(f"**Bot** [{chat['emotion']} - {chat['confidence']}]: {chat['bot']}")
-        st.write("---")
 
 if __name__ == "__main__":
     main()
