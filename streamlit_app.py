@@ -401,7 +401,7 @@ def main():
     """, unsafe_allow_html=True)
     
     st.markdown('<div class="main-header">মনরং</div>', unsafe_allow_html=True)
-    st.markdown("### **আপনার মন, আপনার রঙ** 🧠")
+    st.markdown("### **আপনার মন, আপনার রঙ** ")
     
     # Initialize session state
     if "messages" not in st.session_state:
@@ -533,4 +533,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
