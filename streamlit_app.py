@@ -126,13 +126,16 @@ def detect_user_mood(text):
 # Smart response generator
 def generate_smart_response(user_input, user_mood, conversation_history):
     # Analyze conversation context
-    context_keywords = {
-        "work": ["কাজ", "অফিস", "প্রজেক্ট", "বস"],
-        "family": ["পরিবার", "বাবা", "মা", "ভাই", "বোন"],
-        "love": ["প্রেম", "গার্লফ্রেন্ড", "বয়ফ্রেন্ড", "বিয়ে"],
-        "health": ["স্বাস্থ্য", "ডাক্তার", "ওষুধ", "ব্যাথা"]
-    }
-    
+   # Enhanced context detection
+context_keywords = {
+    "work": ["কাজ", "অফিস", "প্রজেক্ট", "বস", "ক্যারিয়ার", "পেশা", "ইন্টারভিউ", "চাকরি"],
+    "family": ["পরিবার", "বাবা", "মা", "ভাই", "বোন", "দাদা", "দাদী", "নানা", "নানি"],
+    "love": ["প্রেম", "গার্লফ্রেন্ড", "বয়ফ্রেন্ড", "বিয়ে", "রিলেশনশিপ", "প্রেমিকা", "প্রেমিক"],
+    "health": ["স্বাস্থ্য", "ডাক্তার", "ওষুধ", "ব্যাথা", "হাসপাতাল", "ফিটনেস", "ওজন", "ডায়েট"],
+    "study": ["স্টাডি", "পরীক্ষা", "রেজাল্ট", "বিদ্যালয়", "কলেজ", "বিশ্ববিদ্যালয়", "পড়াশোনা"],
+    "finance": ["টাকা", "আয়", "ব্যয়", "বিনিয়োগ", "সঞ্চয়", "বাজেট", "বেতন", "ঋণ"],
+    "friendship": ["বন্ধু", "ফ্রেন্ড", "সোশ্যাল", "সম্পর্ক", "বন্ধুত্ব"]
+}
     # Detect context
     current_context = "general"
     for context, keywords in context_keywords.items():
@@ -150,17 +153,212 @@ def generate_smart_response(user_input, user_mood, conversation_history):
     else:
         response = random.choice(responses["general"])
         
-        # Add context-specific advice
-        if current_context == "work":
-            response += "\n\nকাজের ব্যাপারে বলছেন? Work-life balance真是 important! 💼"
-        elif current_context == "family":
-            response += "\n\nপরিবারের কথা? Family真是 আমাদের biggest strength! 👨‍👩‍👧‍👦"
-        elif current_context == "love":
-            response += "\n\nপ্রেমের কথা? Love真是 beautiful feeling! ❤️"
-        elif current_context == "health":
-            response += "\n\nস্বাস্থ্যের কথা? Health真是 wealth! 🏥"
-            
-        return response
+      # Add context-specific advice with BIG responses
+if current_context == "work":
+    work_advice = """
+    
+💼 **ক্যারিয়ার ও কাজ সম্পর্কে বিশেষ পরামর্শ:**
+
+🎯 **পেশাগত উন্নতির জন্য:**
+• নতুন skills শিখতে থাকুন regularly
+• Networking গুরুত্বপূর্ণ - colleagues সাথে ভাল relation maintain করুন
+• Time management শিখুন - Pomodoro technique try করতে পারেন
+
+🔄 **Work-Life Balance:**
+• Office time আর personal time আলাদা রাখুন
+• Regular breaks নিন - প্রতি 1 hour এ 5-10 minute break
+• Weekend এ office work avoid করার try করুন
+
+📈 **Career Growth:**
+• Short-term আর long-term goals set করুন
+• Mentor খুঁজুন - experienced person এর guidance নিন
+• Online courses করুন (Coursera, Udemy, YouTube)
+
+🔥 **Motivation:**
+"সফলতা overnight আসে না, regularly work করার ফল!"
+"""
+    response += work_advice
+
+elif current_context == "family":
+    family_advice = """
+    
+👨‍👩‍👧‍👦 **পরিবার সম্পর্কে গভীর পরামর্শ:**
+
+❤️ **সম্পর্ক উন্নতির উপায়:**
+• Regular family time রাখুন -weekly একসাথে meal খান
+• Active listening practice করুন - শুধু শুনুন, judgment দেবেন না
+• Appreciation প্রকাশ করুন - small things এর জন্য thanks বলুন
+
+🏡 **Family Bonding:**
+• Family games খেলুন - Ludo, Carrom, Cards
+• একসাথে cooking করুন - special weekend activity
+• Family photos দেখুন - memories share করুন
+
+🤝 **Conflict Resolution:**
+• Calmly কথা বলুন - raised voice সমস্যা বাড়ায়
+• Understanding develop করুন - অন্য person এর perspective বুঝার try করুন
+• Compromise শিখুন - relationships এ give and take important
+
+💝 **Special Tips:**
+"পরিবার就是 আমাদের safe space - এখানে আমরা exactly who we are!"
+"""
+    response += family_advice
+
+elif current_context == "love":
+    love_advice = """
+    
+❤️ **প্রেম ও সম্পর্ক সম্পর্কে বিশেষ গাইডলাইন:**
+
+💑 **Healthy Relationship Tips:**
+• Communication是关键 - regularly feelings share করুন
+• Trust build করুন - honesty আর transparency maintain করুন
+• Personal space respect করুন - everyone needs alone time
+
+🌟 **Relationship Growth:**
+• New experiences share করুন - একসাথে new places visit করুন
+• Goals set করুন - future plans together তৈরি করুন
+• Appreciation regularly প্রকাশ করুন - small gestures matter
+
+🔄 **Challenges Handle:**
+• Arguments calmly handle করুন - cooling period নিন if needed
+• Understanding develop করুন - partner এর feelings validate করুন
+• Compromise করুন - relationships require adjustment
+
+💞 **Romantic Gestures:**
+• Surprise gifts দিন - doesn't have to be expensive
+• Love letters লিখুন - old school but very effective
+• Quality time spend করুন - phones away, just each other
+
+🌹 **Beautiful Thought:**
+"True love isn't about finding the perfect person, but about seeing an imperfect person perfectly."
+"""
+    response += love_advice
+
+elif current_context == "health":
+    health_advice = """
+    
+🏥 **স্বাস্থ্য ও ফিটনেস সম্পর্কে সম্পূর্ণ গাইড:**
+
+🍎 **Healthy Eating Habits:**
+• Balanced diet নিন - proteins, carbs, fats, vitamins, minerals
+• Regular meals খান - breakfast never skip করুন
+• Water plenty পান করুন - 8 glasses daily
+
+💪 **Physical Fitness:**
+• Daily exercise করুন - 30 minutes walking
+• Yoga বা meditation try করুন - mental health এর জন্য excellent
+• Strength training করুন - weekly 2-3 times
+
+😴 **Sleep & Rest:**
+• Regular sleep schedule maintain করুন
+• 7-8 hours sleep নিন daily
+• Screen time reduce করুন bedtime আগে
+
+🧠 **Mental Health:**
+• Stress management শিখুন - deep breathing, meditation
+• Hobbies develop করুন - painting, music, gardening
+• Social connections maintain করুন - friends সাথে regularly meet করুন
+
+🩺 **Regular Checkups:**
+• Doctor visit করুন regularly
+• Health screenings avoid করুন
+• Vaccinations up to date রাখুন
+
+🌟 **Health Mantra:**
+"স্বাস্থ্যই সম্পদ - small daily habits create big long-term results!"
+"""
+    response += health_advice
+
+# Additional contexts with big responses
+elif current_context == "study":
+    study_advice = """
+    
+📚 **স্টাডি ও শিক্ষা সম্পর্কে বিস্তারিত পরামর্শ:**
+
+🎓 **Effective Learning Techniques:**
+• Active recall practice করুন - just reading নয়, recall করুন
+• Spaced repetition ব্যবহার করুন - regularly revise করুন
+• Pomodoro technique follow করুন - 25 minutes study, 5 minutes break
+
+📖 **Study Planning:**
+• Study schedule তৈরি করুন - realistic goals set করুন
+• Priority basis পড়ুন - important topics first
+• Regular breaks নিন - brain needs rest
+
+🧠 **Memory Improvement:**
+• Mnemonics ব্যবহার করুন - memory techniques
+• Visual learning try করুন - diagrams, mind maps
+• Teach others - explaining helps understanding
+
+💻 **Online Learning:**
+• Structured courses নিন - Coursera, edX, Khan Academy
+• Note-taking করুন - digital বা handwritten
+• Practice regularly - theoretical knowledge alone insufficient
+
+🚀 **Motivation for Students:**
+"Education is the most powerful weapon which you can use to change the world - Nelson Mandela"
+"""
+    response += study_advice
+
+elif current_context == "finance":
+    finance_advice = """
+    
+💰 **ফাইন্যান্স ও টাকা সম্পর্কে সম্পূর্ণ গাইড:**
+
+💸 **Smart Saving Tips:**
+• Budget তৈরি করুন - income আর expenses track করুন
+• Emergency fund তৈরি করুন -6 months expenses
+• Automatic savings set করুন - monthly automatic transfer
+
+📈 **Investment Strategies:**
+• Start early - compound magic কাজ করে
+• Diversify portfolio - different types investments
+• Long-term thinking - get rich quick schemes avoid করুন
+
+💳 **Debt Management:**
+• High-interest debt first pay off করুন
+• Credit cards wisely ব্যবহার করুন
+• Living within means practice করুন
+
+🏠 **Financial Planning:**
+• Retirement planning early শুরু করুন
+• Insurance necessary - health, life insurance
+• Financial goals set করুন - short-term and long-term
+
+💡 **Money Mindset:**
+"It's not about how much you make, but how much you keep and how well it works for you!"
+"""
+    response += finance_advice
+
+elif current_context == "friendship":
+    friendship_advice = """
+    
+👫 **বন্ধুত্ব ও সামাজিক সম্পর্ক সম্পর্কে বিশেষ পরামর্শ:**
+
+🤝 **Building Strong Friendships:**
+• Regular contact রাখুন - calls, messages, meets
+• Active listening practice করুন - genuine interest নিন
+• Support during tough times - true friends difficult times এ পাশে থাকেন
+
+🌟 **Maintaining Friendships:**
+• Remember important dates - birthdays, anniversaries
+• Small gestures করুন - checking in, asking about their life
+• Forgiveness practice করুন - nobody perfect
+
+🎉 **Social Skills:**
+• Conversation skills develop করুন - open-ended questions জিজ্ঞাসা করুন
+• Empathy cultivate করুন - others' feelings understand করার try করুন
+• Authentic থাকুন - pretend করা unnecessary
+
+💫 **Quality vs Quantity:**
+"Few genuine friends better than many superficial relationships!"
+
+🌺 **Friendship Quotes:**
+"A real friend is one who walks in when the rest of the world walks out."
+"""
+    response += friendship_advice
+
+return response
 
 def main():
     st.set_page_config(
@@ -334,5 +532,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
