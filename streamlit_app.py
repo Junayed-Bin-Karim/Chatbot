@@ -127,7 +127,7 @@ def detect_user_mood(text):
 def generate_smart_response(user_input, user_mood, conversation_history):
     # Analyze conversation context
    # Enhanced context detection
-context_keywords = {
+    context_keywords = {
     "work": ["কাজ", "অফিস", "প্রজেক্ট", "বস", "ক্যারিয়ার", "পেশা", "ইন্টারভিউ", "চাকরি"],
     "family": ["পরিবার", "বাবা", "মা", "ভাই", "বোন", "দাদা", "দাদী", "নানা", "নানি"],
     "love": ["প্রেম", "গার্লফ্রেন্ড", "বয়ফ্রেন্ড", "বিয়ে", "রিলেশনশিপ", "প্রেমিকা", "প্রেমিক"],
@@ -532,6 +532,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
