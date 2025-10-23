@@ -429,7 +429,7 @@ def main():
         
         # Statistics
         if st.session_state.messages:
-            st.subheader("📊 Statistics")
+            st.subheader("Statistics")
             mood_count = {}
             for msg in st.session_state.messages:
                 if msg["role"] == "user" and "mood" in msg:
@@ -459,7 +459,7 @@ def main():
                     st.caption(f"Mood: {message['mood']}")
     
     with col2:
-        st.subheader("💡 Tips")
+        st.subheader("💡মনরং Tips")
         st.info("""
         Try saying:
         - "আজকে আমার খুব ভালো লাগছে"
@@ -535,6 +535,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
