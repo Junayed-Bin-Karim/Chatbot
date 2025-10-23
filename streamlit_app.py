@@ -13,12 +13,12 @@ MOOD_RESPONSES = {
             "হাই! আপনার আনন্দ আমাকেও প্রভাবিত করছে! ✨"
         ],
         "general": [
-            "ওয়াও! এটি真是 চমৎকার! আপনার positivity contagious! 🌈",
+            "ওয়াও! এটি চমৎকার! আপনার positivity contagious! 🌈",
             "আপনার কথায় একটা বিশেষ energy আছে, আমি feel করতে পারছি! 💫",
-            "এই optimistic attitude真是 খুবই inspiring! 🎉"
+            "এই optimistic attitude খুবই inspiring! 🎉"
         ],
         "problem": [
-            "আপনার optimistic approach真是 প্রশংসনীয়! এই attitude নিয়ে এhead যান! 🚀",
+            "আপনার optimistic approach প্রশংসনীয়! এই attitude নিয়ে এhead যান! ",
             "সমস্যা থাকতেই পারে, কিন্তু আপনার positive mindset সব overcome করতে পারবে! 💪",
             "আপনার মতো positive person এর জন্য কোনো problemই বড় না! 🌟"
         ]
@@ -31,12 +31,12 @@ MOOD_RESPONSES = {
         ],
         "general": [
             "আমি বুঝতে পারছি... sometimes life gives us tough moments 🌧️",
-            "এই feelings真是 valid... আপনার যা feel করছেন তা স্বাভাবিক 🫂",
+            "এই feelings valid... আপনার যা feel করছেন তা স্বাভাবিক 🫂",
             "কথাগুলো share করার জন্য ধন্যবাদ... আমি appreciate করছি 🌼"
         ],
         "problem": [
-            "এই difficult time এ আমি আপনার সাথে আছি 💪",
-            "Remember, dark clouds always pass... sunshine一定会 আসবে 🌈",
+            "এই difficult time এ আমি আপনার সাথে আছি ",
+            "Remember, dark clouds always pass... sunshine一 আসবে 🌈",
             "আপনি alone নন... আমরা together এই situation handle করতে পারি 🤝"
         ]
     },
@@ -47,14 +47,14 @@ MOOD_RESPONSES = {
             "হাই... let's talk about what's bothering you 🔥"
         ],
         "general": [
-            "আমি understand your frustration... rage真是 powerful emotion 💥",
-            "এই anger express করা真是 important... keep sharing 🌋",
-            "আপনার feelings真是 justified... continue expressing 🗣️"
+            "আমি understand your frustration... rage powerful emotion 💥",
+            "এই anger express করা important... keep sharing 🌋",
+            "আপনার feelings justified... continue expressing 🗣️"
         ],
         "problem": [
             "Let's channel this anger into positive energy ⚡",
-            "এই situation真是 temporary... solutions一定有 🌈",
-            "আপনার strength真是 admirable, even in anger 💪"
+            "এই situation temporary... solutions一🌈",
+            "আপনার strength admirable, even in anger "
         ]
     },
     "neutral": {
@@ -334,4 +334,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
