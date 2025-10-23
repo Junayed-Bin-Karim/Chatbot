@@ -402,6 +402,8 @@ def main():
     
     st.markdown('<div class="main-header">মনরং</div>', unsafe_allow_html=True)
     st.markdown("### **আপনার মন, আপনার রঙ** ")
+    st.markdown("##### **Created by Junayed Bin Karim** ")
+
     
     # Initialize session state
     if "messages" not in st.session_state:
@@ -533,5 +535,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
