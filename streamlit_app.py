@@ -1,108 +1,73 @@
+# chatBot_lightweight.py
 import streamlit as st
-import time
-import random
+import requests
+import json
 
-# Simple emotion detection without transformers
-def simple_emotion_detection(text):
+# Alternative using a smaller model or API
+def detect_emotion_simple(text):
+    """Simple rule-based emotion detection as fallback"""
+    positive_words = ['happy', 'joy', 'excited', 'good', 'great', 'wonderful', 'amazing']
+    negative_words = ['sad', 'angry', 'mad', 'bad', 'terrible', 'awful', 'hate']
+    
     text_lower = text.lower()
     
-    joy_words = ['happy', 'joy', 'excited', 'good', 'great', 'wonderful', 'amazing', 'খুশি', 'ভালো', 'মজা']
-    sadness_words = ['sad', 'unhappy', 'depressed', 'bad', 'terrible', 'দুঃখ', 'খারাপ', 'কষ্ট']
-    anger_words = ['angry', 'mad', 'frustrated', 'hate', 'রাগ', 'ক্রোধ', 'ঝগড়া']
-    fear_words = ['scared', 'afraid', 'fear', 'worried', 'ভয়', 'চিন্তা', 'আশঙ্কা']
-    
-    if any(word in text_lower for word in joy_words):
-        return 'joy', 0.85
-    elif any(word in text_lower for word in sadness_words):
-        return 'sadness', 0.85
-    elif any(word in text_lower for word in anger_words):
-        return 'anger', 0.85
-    elif any(word in text_lower for word in fear_words):
-        return 'fear', 0.85
+    if any(word in text_lower for word in positive_words):
+        return 'joy', 0.8
+    elif any(word in text_lower for word in negative_words):
+        return 'sadness', 0.8
     else:
         return 'neutral', 0.5
 
-# Bengali responses
-BENGALI_RESPONSES = {
-    'joy': [
-        "আহা! খুব ভালো লাগল শুনে! 😊",
-        "আপনার আনন্দে আমিও খুশি! ✨",
-        "ওয়াও! এটি真是 চমৎকার খবর! 🌟"
-    ],
-    'sadness': [
-        "আমি খুবই দুঃখিত শুনে 💙",
-        "আপনার পাশে আছি 🫂", 
-        "কথা বলে দেখুন, হালকা হবে 🌸"
-    ],
-    'anger': [
-        "রাগ হওয়া স্বাভাবিক 🌪️",
-        "কি bothering আপনাকে বলুন?",
-        "শান্ত হোন, আমি আছি 🫂"
-    ],
-    'fear': [
-        "ভয় পাওয়া স্বাভাবিক 🌈",
-        "কি worry করছেন বলুন?",
-        "আপনি একা নন 🌼"
-    ],
-    'neutral': [
-        "বুঝতে পারলাম 🌟",
-        "আরও বলুন... 💬",
-        "মজার হয়েছে! 😄"
-    ]
-}
-
 def main():
-    st.set_page_config(
-        page_title="বাংলা চ্যাটবট",
-        page_icon="🤖",
-        layout="wide"
-    )
+    st.title("Emotion Chatbot")
     
-    st.title("🤖 সরল বাংলা চ্যাটবট")
-    st.markdown("আমার সাথে বাংলায় কথা বলুন! 💬")
+    # Initialize session state
+    if 'conversation' not in st.session_state:
+        st.session_state.conversation = []
     
-    # Initialize chat history
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
+    # User input
+    user_input = st.text_input("You:")
     
-    # Display chat messages
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-            if "emotion" in message:
-                st.caption(f"Emotion: {message['emotion']} ({message['confidence']}%)")
-    
-    # Chat input
-    if prompt := st.chat_input("আপনার মনের কথা লিখুন..."):
-        # Add user message
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        
-        with st.chat_message("user"):
-            st.markdown(prompt)
+    if user_input:
+        # Try to use transformers if available, otherwise use fallback
+        try:
+            from transformers import pipeline
+            emotion_pipeline = pipeline("text-classification", 
+                                      model="bhadresh-savani/bert-base-uncased-emotion",
+                                      return_all_scores=True)
+            results = emotion_pipeline(user_input)
+            emotion = max(results[0], key=lambda x: x['score'])
+            emotion_name = emotion['label']
+            confidence = emotion['score']
+        except:
+            # Fallback to simple detection
+            emotion_name, confidence = detect_emotion_simple(user_input)
         
         # Generate response
-        with st.chat_message("assistant"):
-            with st.spinner("ভাবছি..."):
-                time.sleep(1)  # Simulate thinking
-                
-                # Detect emotion
-                emotion, confidence = simple_emotion_detection(prompt)
-                
-                # Get Bengali response
-                response = random.choice(BENGALI_RESPONSES.get(emotion, BENGALI_RESPONSES['neutral']))
-                
-                full_response = f"{response}"
-                
-                st.markdown(full_response)
-                st.caption(f"🧠 Emotion: {emotion} ({confidence*100:.1f}%)")
+        responses = {
+            'joy': "That's wonderful! 😊",
+            'sadness': "I'm here for you. 💙",
+            'anger': "I understand you're upset.",
+            'fear': "It's okay to feel scared sometimes.",
+            'surprise': "Wow! That's surprising!",
+            'neutral': "Thanks for sharing that."
+        }
         
-        # Add to history
-        st.session_state.messages.append({
-            "role": "assistant", 
-            "content": full_response,
-            "emotion": emotion,
-            "confidence": f"{confidence*100:.1f}"
+        response = responses.get(emotion_name, "I appreciate you sharing that.")
+        
+        # Store conversation
+        st.session_state.conversation.append({
+            'user': user_input,
+            'emotion': emotion_name,
+            'confidence': f"{confidence:.2f}",
+            'bot': response
         })
+    
+    # Display conversation
+    for i, chat in enumerate(st.session_state.conversation):
+        st.write(f"**You:** {chat['user']}")
+        st.write(f"**Bot** [{chat['emotion']} - {chat['confidence']}]: {chat['bot']}")
+        st.write("---")
 
 if __name__ == "__main__":
     main()
