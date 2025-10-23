@@ -200,7 +200,7 @@ elif current_context == "family":
 • Compromise শিখুন - relationships এ give and take important
 
 💝 **Special Tips:**
-"পরিবার就是 আমাদের safe space - এখানে আমরা exactly who we are!"
+"পরিবার আমাদের safe space - এখানে আমরা exactly who we are!"
 """
     response += family_advice
 
@@ -210,7 +210,7 @@ elif current_context == "love":
 ❤️ **প্রেম ও সম্পর্ক সম্পর্কে বিশেষ গাইডলাইন:**
 
 💑 **Healthy Relationship Tips:**
-• Communication是关键 - regularly feelings share করুন
+• Communication - regularly feelings share করুন
 • Trust build করুন - honesty আর transparency maintain করুন
 • Personal space respect করুন - everyone needs alone time
 
@@ -532,6 +532,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
