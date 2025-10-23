@@ -1,38 +1,65 @@
 import streamlit as st
 import time
+import random
 
-# Cache the model loading
-@st.cache_resource
-def load_emotion_model():
-    try:
-        from transformers import pipeline
-        return pipeline("text-classification", 
-                       model="bhadresh-savani/bert-base-uncased-emotion",
-                       return_all_scores=True)
-    except Exception as e:
-        st.error(f"Error loading model: {e}")
-        return None
+# Simple emotion detection without transformers
+def simple_emotion_detection(text):
+    text_lower = text.lower()
+    
+    joy_words = ['happy', 'joy', 'excited', 'good', 'great', 'wonderful', 'amazing', 'খুশি', 'ভালো', 'মজা']
+    sadness_words = ['sad', 'unhappy', 'depressed', 'bad', 'terrible', 'দুঃখ', 'খারাপ', 'কষ্ট']
+    anger_words = ['angry', 'mad', 'frustrated', 'hate', 'রাগ', 'ক্রোধ', 'ঝগড়া']
+    fear_words = ['scared', 'afraid', 'fear', 'worried', 'ভয়', 'চিন্তা', 'আশঙ্কা']
+    
+    if any(word in text_lower for word in joy_words):
+        return 'joy', 0.85
+    elif any(word in text_lower for word in sadness_words):
+        return 'sadness', 0.85
+    elif any(word in text_lower for word in anger_words):
+        return 'anger', 0.85
+    elif any(word in text_lower for word in fear_words):
+        return 'fear', 0.85
+    else:
+        return 'neutral', 0.5
+
+# Bengali responses
+BENGALI_RESPONSES = {
+    'joy': [
+        "আহা! খুব ভালো লাগল শুনে! 😊",
+        "আপনার আনন্দে আমিও খুশি! ✨",
+        "ওয়াও! এটি真是 চমৎকার খবর! 🌟"
+    ],
+    'sadness': [
+        "আমি খুবই দুঃখিত শুনে 💙",
+        "আপনার পাশে আছি 🫂", 
+        "কথা বলে দেখুন, হালকা হবে 🌸"
+    ],
+    'anger': [
+        "রাগ হওয়া স্বাভাবিক 🌪️",
+        "কি bothering আপনাকে বলুন?",
+        "শান্ত হোন, আমি আছি 🫂"
+    ],
+    'fear': [
+        "ভয় পাওয়া স্বাভাবিক 🌈",
+        "কি worry করছেন বলুন?",
+        "আপনি একা নন 🌼"
+    ],
+    'neutral': [
+        "বুঝতে পারলাম 🌟",
+        "আরও বলুন... 💬",
+        "মজার হয়েছে! 😄"
+    ]
+}
 
 def main():
-    st.set_page_config(page_title="Emotion Chatbot", page_icon="🤖")
+    st.set_page_config(
+        page_title="বাংলা চ্যাটবট",
+        page_icon="🤖",
+        layout="wide"
+    )
     
-    st.title("🤖 Emotion-Aware Chatbot")
-    st.write("Chat with me and I'll detect your emotions!")
-    
-    # Load model
-    with st.spinner("Loading emotion detection model..."):
-        emotion_pipeline = load_emotion_model()
-    
-    if emotion_pipeline is None:
-        st.error("""
-        **Failed to load emotion detection model.**
-        
-        Please check that:
-        - `transformers` and `torch` are in requirements.txt
-        - The model name is correct
-        - There's enough memory available
-        """)
-        return
+    st.title("🤖 সরল বাংলা চ্যাটবট")
+    st.markdown("আমার সাথে বাংলায় কথা বলুন! 💬")
     
     # Initialize chat history
     if "messages" not in st.session_state:
@@ -43,48 +70,38 @@ def main():
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
             if "emotion" in message:
-                st.caption(f"Detected emotion: {message['emotion']}")
+                st.caption(f"Emotion: {message['emotion']} ({message['confidence']}%)")
     
     # Chat input
-    if prompt := st.chat_input("How are you feeling today?"):
-        # Add user message to chat history
+    if prompt := st.chat_input("আপনার মনের কথা লিখুন..."):
+        # Add user message
         st.session_state.messages.append({"role": "user", "content": prompt})
+        
         with st.chat_message("user"):
             st.markdown(prompt)
         
-        # Detect emotion and generate response
+        # Generate response
         with st.chat_message("assistant"):
-            with st.spinner("Analyzing emotion..."):
-                try:
-                    results = emotion_pipeline(prompt)
-                    emotion = max(results[0], key=lambda x: x['score'])
-                    emotion_name = emotion['label']
-                    confidence = emotion['score']
-                    
-                    # Generate response based on emotion
-                    responses = {
-                        'sadness': "I'm sorry you're feeling this way. I'm here for you. 💙",
-                        'joy': "That's wonderful! Your happiness is contagious! 😊",
-                        'love': "It's beautiful to feel love. ❤️",
-                        'anger': "I understand you're frustrated. Would you like to talk about it?",
-                        'fear': "It's okay to feel scared sometimes. You're stronger than you think.",
-                        'surprise': "Wow! That's quite surprising! What happened?"
-                    }
-                    
-                    response = responses.get(emotion_name, "Thank you for sharing that with me.")
-                    full_response = f"{response}\n\n*(Detected: {emotion_name} with {confidence:.1%} confidence)*"
-                    
-                except Exception as e:
-                    full_response = "I understand. Thanks for sharing your feelings with me."
-                    emotion_name = "unknown"
-            
-            st.markdown(full_response)
+            with st.spinner("ভাবছি..."):
+                time.sleep(1)  # Simulate thinking
+                
+                # Detect emotion
+                emotion, confidence = simple_emotion_detection(prompt)
+                
+                # Get Bengali response
+                response = random.choice(BENGALI_RESPONSES.get(emotion, BENGALI_RESPONSES['neutral']))
+                
+                full_response = f"{response}"
+                
+                st.markdown(full_response)
+                st.caption(f"🧠 Emotion: {emotion} ({confidence*100:.1f}%)")
         
-        # Add assistant response to chat history
+        # Add to history
         st.session_state.messages.append({
             "role": "assistant", 
             "content": full_response,
-            "emotion": emotion_name
+            "emotion": emotion,
+            "confidence": f"{confidence*100:.1f}"
         })
 
 if __name__ == "__main__":
