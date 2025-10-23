@@ -18,7 +18,7 @@ MOOD_RESPONSES = {
             "এই optimistic attitude খুবই inspiring! 🎉"
         ],
         "problem": [
-            "আপনার optimistic approach প্রশংসনীয়! এই attitude নিয়ে এhead যান! ",
+            "আপনার optimistic approach প্রশংসনীয়! এই attitude নিয়ে এhead যান! 🚀",
             "সমস্যা থাকতেই পারে, কিন্তু আপনার positive mindset সব overcome করতে পারবে! 💪",
             "আপনার মতো positive person এর জন্য কোনো problemই বড় না! 🌟"
         ]
@@ -35,8 +35,8 @@ MOOD_RESPONSES = {
             "কথাগুলো share করার জন্য ধন্যবাদ... আমি appreciate করছি 🌼"
         ],
         "problem": [
-            "এই difficult time এ আমি আপনার সাথে আছি ",
-            "Remember, dark clouds always pass... sunshine一 আসবে 🌈",
+            "এই difficult time এ আমি আপনার সাথে আছি 💪",
+            "Remember, dark clouds always pass... sunshine一定会 আসবে 🌈",
             "আপনি alone নন... আমরা together এই situation handle করতে পারি 🤝"
         ]
     },
@@ -53,8 +53,8 @@ MOOD_RESPONSES = {
         ],
         "problem": [
             "Let's channel this anger into positive energy ⚡",
-            "এই situation temporary... solutions一🌈",
-            "আপনার strength admirable, even in anger "
+            "এই situation temporary... solutions一定有 🌈",
+            "আপনার strength admirable, even in anger 💪"
         ]
     },
     "neutral": {
@@ -126,16 +126,17 @@ def detect_user_mood(text):
 # Smart response generator
 def generate_smart_response(user_input, user_mood, conversation_history):
     # Analyze conversation context
-   # Enhanced context detection
+    # Enhanced context detection
     context_keywords = {
-    "work": ["কাজ", "অফিস", "প্রজেক্ট", "বস", "ক্যারিয়ার", "পেশা", "ইন্টারভিউ", "চাকরি"],
-    "family": ["পরিবার", "বাবা", "মা", "ভাই", "বোন", "দাদা", "দাদী", "নানা", "নানি"],
-    "love": ["প্রেম", "গার্লফ্রেন্ড", "বয়ফ্রেন্ড", "বিয়ে", "রিলেশনশিপ", "প্রেমিকা", "প্রেমিক"],
-    "health": ["স্বাস্থ্য", "ডাক্তার", "ওষুধ", "ব্যাথা", "হাসপাতাল", "ফিটনেস", "ওজন", "ডায়েট"],
-    "study": ["স্টাডি", "পরীক্ষা", "রেজাল্ট", "বিদ্যালয়", "কলেজ", "বিশ্ববিদ্যালয়", "পড়াশোনা"],
-    "finance": ["টাকা", "আয়", "ব্যয়", "বিনিয়োগ", "সঞ্চয়", "বাজেট", "বেতন", "ঋণ"],
-    "friendship": ["বন্ধু", "ফ্রেন্ড", "সোশ্যাল", "সম্পর্ক", "বন্ধুত্ব"]
-}
+        "work": ["কাজ", "অফিস", "প্রজেক্ট", "বস", "ক্যারিয়ার", "পেশা", "ইন্টারভিউ", "চাকরি"],
+        "family": ["পরিবার", "বাবা", "মা", "ভাই", "বোন", "দাদা", "দাদী", "নানা", "নানি"],
+        "love": ["প্রেম", "গার্লফ্রেন্ড", "বয়ফ্রেন্ড", "বিয়ে", "রিলেশনশিপ", "প্রেমিকা", "প্রেমিক"],
+        "health": ["স্বাস্থ্য", "ডাক্তার", "ওষুধ", "ব্যাথা", "হাসপাতাল", "ফিটনেস", "ওজন", "ডায়েট"],
+        "study": ["স্টাডি", "পরীক্ষা", "রেজাল্ট", "বিদ্যালয়", "কলেজ", "বিশ্ববিদ্যালয়", "পড়াশোনা"],
+        "finance": ["টাকা", "আয়", "ব্যয়", "বিনিয়োগ", "সঞ্চয়", "বাজেট", "বেতন", "ঋণ"],
+        "friendship": ["বন্ধু", "ফ্রেন্ড", "সোশ্যাল", "সম্পর্ক", "বন্ধুত্ব"]
+    }
+    
     # Detect context
     current_context = "general"
     for context, keywords in context_keywords.items():
@@ -147,16 +148,16 @@ def generate_smart_response(user_input, user_mood, conversation_history):
     responses = MOOD_RESPONSES[user_mood]
     
     if "hello" in user_input.lower() or "hi" in user_input.lower() or "হ্যালো" in user_input:
-        return random.choice(responses["greeting"])
+        response = random.choice(responses["greeting"])
     elif any(word in user_input for word in ["problem", "issue", "সমস্যা", "কষ্ট"]):
-        return random.choice(responses["problem"])
+        response = random.choice(responses["problem"])
     else:
         response = random.choice(responses["general"])
-        
-      # Add context-specific advice with BIG responses
-if current_context == "work":
-    work_advice = """
     
+    # Add context-specific advice with BIG responses
+    if current_context == "work":
+        work_advice = """
+        
 💼 **ক্যারিয়ার ও কাজ সম্পর্কে বিশেষ পরামর্শ:**
 
 🎯 **পেশাগত উন্নতির জন্য:**
@@ -177,15 +178,15 @@ if current_context == "work":
 🔥 **Motivation:**
 "সফলতা overnight আসে না, regularly work করার ফল!"
 """
-    response += work_advice
+        response += work_advice
 
-elif current_context == "family":
-    family_advice = """
-    
+    elif current_context == "family":
+        family_advice = """
+        
 👨‍👩‍👧‍👦 **পরিবার সম্পর্কে গভীর পরামর্শ:**
 
 ❤️ **সম্পর্ক উন্নতির উপায়:**
-• Regular family time রাখুন -weekly একসাথে meal খান
+• Regular family time রাখুন - weekly একসাথে meal খান
 • Active listening practice করুন - শুধু শুনুন, judgment দেবেন না
 • Appreciation প্রকাশ করুন - small things এর জন্য thanks বলুন
 
@@ -202,11 +203,11 @@ elif current_context == "family":
 💝 **Special Tips:**
 "পরিবার আমাদের safe space - এখানে আমরা exactly who we are!"
 """
-    response += family_advice
+        response += family_advice
 
-elif current_context == "love":
-    love_advice = """
-    
+    elif current_context == "love":
+        love_advice = """
+        
 ❤️ **প্রেম ও সম্পর্ক সম্পর্কে বিশেষ গাইডলাইন:**
 
 💑 **Healthy Relationship Tips:**
@@ -232,11 +233,11 @@ elif current_context == "love":
 🌹 **Beautiful Thought:**
 "True love isn't about finding the perfect person, but about seeing an imperfect person perfectly."
 """
-    response += love_advice
+        response += love_advice
 
-elif current_context == "health":
-    health_advice = """
-    
+    elif current_context == "health":
+        health_advice = """
+        
 🏥 **স্বাস্থ্য ও ফিটনেস সম্পর্কে সম্পূর্ণ গাইড:**
 
 🍎 **Healthy Eating Habits:**
@@ -261,18 +262,18 @@ elif current_context == "health":
 
 🩺 **Regular Checkups:**
 • Doctor visit করুন regularly
-• Health screenings avoid করুন
+• Health screenings avoid করবেন না
 • Vaccinations up to date রাখুন
 
 🌟 **Health Mantra:**
 "স্বাস্থ্যই সম্পদ - small daily habits create big long-term results!"
 """
-    response += health_advice
+        response += health_advice
 
-# Additional contexts with big responses
-elif current_context == "study":
-    study_advice = """
-    
+    # Additional contexts with big responses
+    elif current_context == "study":
+        study_advice = """
+        
 📚 **স্টাডি ও শিক্ষা সম্পর্কে বিস্তারিত পরামর্শ:**
 
 🎓 **Effective Learning Techniques:**
@@ -298,16 +299,16 @@ elif current_context == "study":
 🚀 **Motivation for Students:**
 "Education is the most powerful weapon which you can use to change the world - Nelson Mandela"
 """
-    response += study_advice
+        response += study_advice
 
-elif current_context == "finance":
-    finance_advice = """
-    
+    elif current_context == "finance":
+        finance_advice = """
+        
 💰 **ফাইন্যান্স ও টাকা সম্পর্কে সম্পূর্ণ গাইড:**
 
 💸 **Smart Saving Tips:**
 • Budget তৈরি করুন - income আর expenses track করুন
-• Emergency fund তৈরি করুন -6 months expenses
+• Emergency fund তৈরি করুন - 6 months expenses
 • Automatic savings set করুন - monthly automatic transfer
 
 📈 **Investment Strategies:**
@@ -328,11 +329,11 @@ elif current_context == "finance":
 💡 **Money Mindset:**
 "It's not about how much you make, but how much you keep and how well it works for you!"
 """
-    response += finance_advice
+        response += finance_advice
 
-elif current_context == "friendship":
-    friendship_advice = """
-    
+    elif current_context == "friendship":
+        friendship_advice = """
+        
 👫 **বন্ধুত্ব ও সামাজিক সম্পর্ক সম্পর্কে বিশেষ পরামর্শ:**
 
 🤝 **Building Strong Friendships:**
@@ -356,9 +357,9 @@ elif current_context == "friendship":
 🌺 **Friendship Quotes:**
 "A real friend is one who walks in when the rest of the world walks out."
 """
-    response += friendship_advice
+        response += friendship_advice
 
-return response
+    return response
 
 def main():
     st.set_page_config(
@@ -399,8 +400,8 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    st.markdown('<div class="main-header"> Smart বাংলা Chatbot</div>', unsafe_allow_html=True)
-    st.markdown("### **আপনার Mood বুঝে Response দিবে!** ")
+    st.markdown('<div class="main-header">🎯 Smart বাংলা Chatbot</div>', unsafe_allow_html=True)
+    st.markdown("### **আপনার Mood বুঝে Response দিবে!** 🧠")
     
     # Initialize session state
     if "messages" not in st.session_state:
@@ -532,8 +533,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
