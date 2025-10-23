@@ -400,16 +400,16 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-st.markdown('<div class="main-header">মনরং</div>', unsafe_allow_html=True)
-st.markdown("### **আপনার মন, আপনার রঙ ** ")
-
-# Initialize session state
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-if "user_mood" not in st.session_state:
-    st.session_state.user_mood = "neutral"
-if "mood_description" not in st.session_state:
-    st.session_state.mood_description = "আপনার mood এখনও analyze করা হয়নি"
+    st.markdown('<div class="main-header">🎯 Smart বাংলা Chatbot</div>', unsafe_allow_html=True)
+    st.markdown("### **আপনার Mood বুঝে Response দিবে!** 🧠")
+    
+    # Initialize session state
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+    if "user_mood" not in st.session_state:
+        st.session_state.user_mood = "neutral"
+    if "mood_description" not in st.session_state:
+        st.session_state.mood_description = "আপনার mood এখনও analyze করা হয়নি"
     
     # Sidebar
     with st.sidebar:
@@ -533,7 +533,3 @@ if "mood_description" not in st.session_state:
 
 if __name__ == "__main__":
     main()
-
-
-
-
